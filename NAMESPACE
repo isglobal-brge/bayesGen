@@ -1,0 +1,17 @@
+export(
+bayesCNVassoc,
+bayesSNPassoc,
+getParameters,
+makeHeatmap,
+checkConvergence
+)
+
+import("rjags")
+import("INLA")
+
+
+S3method(plot,bayesCNVassoc)
+S3method(print,bayesCNVassoc)
+S3method(plot,bayesSNPassoc)
+S3method(print,bayesSNPassoc)
+

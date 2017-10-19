@@ -1,0 +1,41 @@
+\name{OV}
+\Rdversion{1.1}
+\alias{OV}
+\docType{data}
+
+\title{
+CNV data for Ovarian Serous Cystadenocarcinoma obtained from The Cancer Genome Atlas (TCGA) data portal
+}
+
+\description{
+
+}
+
+\usage{data(OV)}
+
+\format{
+Two data frames (cnvs and phenotype) containing copy number data and phenotype information for 456 individuals diagnosed with Ovarian Serous Cystadenocarcinoma, respectively. 
+}
+
+\details{
+The list of known copy number variations (CNVs) is downloaded from the Database of Genomic Variants.
+
+
+The copy number data matrix corresponds to the number of copies for each copy number variations (CNVs) downloaded from the Database of Genomic Variants using the genome build GRCh37 (http://projects.tcag.ca/variation/downloads/variation.hg19.v10.nov.2010.txt). 
+
+The phenotype data.frame contains information about the tumor residual disease after receiving treatment (variable coded as 'tumor_residual_disease' at TCGA data portal). Initial TCGA data included 572 females, however 116 of them did not have information about this covariate and, hence, were removed for this analysis. Variable had 4 categories: 'Complete remission', 'Partial remission', 'Stable disease' and 'Progressive disease'. Categories 'Stable disease' and 'Progressive disease' were collapsed into one categorie ('Null response'). 
+}
+
+\source{
+Data obtained from The Cancer Genome Atlas (TCGA) available at {\tt http://cancergenome.nih.gov/}
+}
+
+\references{
+The Cancer Genome Atlas (TCGA). {\tt http://cancergenome.nih.gov/}
+}
+
+\examples{
+data(OV)
+}
+
+\keyword{datasets}

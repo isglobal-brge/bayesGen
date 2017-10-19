@@ -1,0 +1,27 @@
+
+@article{Plu08,
+   Author = {Plummer, M. },
+   Title = {Penalized loss functions for Bayesian model comparison},
+   Journal = {Biostatistics},
+   Volume = {9},
+   Number = {3},
+   Pages = {523-539},
+   Year = {2008} }
+
+@article{SpiBesCar02,
+   Author = {DJ Spiegelhalter, D.J. and Best, N.G. and Carlin, B.P. and van der Linde, A.},
+   Title = {Bayesian measures of model complexity and fit (with discussion)},
+   Journal = {Journal of the Royal Statistical Societey Series B},
+   Volume = {64},
+   Pages = {583-639},
+   Year = {2002} }
+
+
+@UNPUBLISHED{manRjags,
+   author = {Martin Plummer},
+   title = {JAGS Version 1.0.3 manual},
+   note = {Available at http://calvin.iarc.fr/~martyn/software/jags/},
+   month = {April},
+   year = {2009} }
+
+

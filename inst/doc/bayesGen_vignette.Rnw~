@@ -1,0 +1,277 @@
+\documentclass[11pt]{article}
+\usepackage{hyperref}
+\usepackage[pdftex]{color,graphicx,epsfig}
+\DeclareGraphicsRule{.pdftex}{pdf}{.pdftex}{}
+\usepackage{amssymb,amsmath}
+
+
+
+
+\begin{document}
+
+%\setkeys{Gin}{width=0.99\textwidth}
+
+\title{\bf bayesGen: Association analysis of genomic data using a Bayesian model}
+
+\vspace{1cm}
+
+\author{Juan J Abell\'an, Carlos Abell\'an, Juan R Gonz\'alez}
+
+\maketitle
+
+\begin{center}
+
+Centre Superior d'Investigacions en Salut P\'ublica (CSISP) \\
+CIBER Epidemiolog\'ia y Salud P\'ublica (CIBERESP) \\
+Center for Research in Environmental Epidemiology (CREAL)
+
+
+\vspace{1cm}
+
+{\tt jrgonzalez@creal.cat}
+{\tt http://www.creal.cat/jrgonzalez/software.htm}
+
+\end{center}
+
+
+\tableofcontents
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+
+
+This document provides an overview of the {\tt bayesGen} package that is available at CRAN (http://cran.r-project.org/). The package implements a Bayesian approach for genetic association studies. We propose a shared-component model to tease out the genotype information that is common to cases and
+controls from the one that is specific to cases. This allows to detect the SNPs that show the strongest
+association with the disease. The model can nevertheless be applied to more than one disease. More detailed information about the model and assumptions are given in (to be supplied). We illustrate how to analyze SNP data by using a synthetic data set (WTCCC will also be included). The simulated data set contains information about 72 SNPs in 5 genes. It includes information for 800 individuals divided in 4 populations: controls and 3 type of cases (M1, M2, and M3). We simulated SNPs from gene 1 to be associated with M1 and SNPs from gene 3 to M3. 
+  
+
+
+\section{Getting started}
+
+\noindent The {\tt bayesSNPassoc} package uses {\tt JAGS}, a program for analysis of Bayesian hierarchical models using Markov Chain Monte Carlo (MCMC) simulation \cite{manRjags}, to estimate model parameters. The current implementation of {\tt bayesSNPassoc} is based on JAGS version 1.4.0. JAGS has an R interface {\tt rjags} that is used by the package ({\tt rjags version 1.0.3-13}). 
+
+We start by attaching the required libraries by typing 
+
+<<echo=T>>=
+library(rjags)
+@
+
+\noindent Then, the library is loaded by excuting 
+
+<<echo=T>>=
+library(bayesGen)
+@
+
+
+\section{The data}
+
+\noindent Data can be imported from a text file or can be loaded using {\tt snpMatrix} package (\textbf{to be supplied}). We provide an example (...)
+
+<<echo=T>>=
+data(sim.data)
+@
+
+\noindent The package requires to have the case-control status and the SNPs in to different objects:
+
+<<echo=T>>= 
+group<-sim.data$caco
+SNPs<-sim.data[,-1]
+@
+
+
+
+\section{Model parameter estimates}
+
+\noindent The model can be run by using the function {\tt bayesSNPassoc} by executing
+
+\begin{verbatim}
+mod<-bayesSNPassoc(group, SNPs)
+Compiling model graph
+   Declaring variables
+   Resolving undeclared variables
+   Allocating nodes
+   Graph Size: 1901
+
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100%
+  |**************************************************| 100%
+  |**************************************************| 100%
+\end{verbatim}
+
+\noindent This process takes about 5 minutes. To avoid waiting, we have saved the object {\tt mod} that can be loaded as
+
+<<echo=T>>=
+data(mod)
+@
+
+
+\noindent The function {\tt bayesSNPassoc} prepares the data and then calls {\tt rjags} to estimate model parameters. We have set up the following default arguments to be passed through {\tt rjags} functions:
+
+<<echo=T>>=
+args(bayesSNPassoc)
+@
+
+\noindent Notice that other arguments realated to MCMC estimation using {\tt JAGS} can be passed through this function. More details about them can be obtained at {\tt http://calvin.iarc.fr/~martyn/software/jags/}.  
+
+
+\section{Checking convergence}
+
+Before interpreting the simulations obtained from de a posteriori distri bution, Markov chains convergence migth be verified. This can be done by using the function {\tt checkConvergence}. This function has an argument called {\tt type} that defines the kind ob plot to be obtained. When {\tt type="Markov chain"} (default value) the function calls to {\tt plot.mcmc} from package {\tt coda}. On the other hand, Gelman-Rubin plots are displayed. The function {\tt checkConvergence} has another argument, {\tt parameter}, to indicate the model parameter to be summaryzed. The default is 'alpha'. For example, Figure \ref{fig-check-alpha} can be obtained by executing:
+
+<<echo=T>>=
+pdf("./figures/fig-check-alpha.pdf")
+checkConvergence(mod)
+dev.off()
+@
+
+\noindent Other model parameters (Figure \ref{fig-check-lambda}) are summaryzed by changing the argument called {\tt parameter}. 
+
+<<echo=T>>=
+pdf("./figures/fig-check-lambda.pdf")
+checkConvergence(mod, parameter="log-lambda")
+dev.off()
+@
+
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=10cm]{./figures/fig-check-alpha.pdf}
+\caption{\small Check alpha ...}
+\label{fig-check-alpha}
+\end{center}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=10cm]{./figures/fig-check-lambda.pdf}
+\caption{\small Check log-lambda ...}
+\label{fig-check-lambda}
+\end{center}
+\end{figure}
+
+
+
+\noindent Gelman-Rubin plot for alpha parameter can be obtained by typing
+
+
+<<echo=T>>=
+pdf("./figures/fig-check-alpha-GR.pdf")
+checkConvergence(mod, type="Gelman-Rubin")
+dev.off()
+@
+
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=10cm]{./figures/fig-check-alpha-GR.pdf}
+\caption{\small Check alpha ...}
+\label{fig-check-alpha-GR}
+\end{center}
+\end{figure}
+ 
+
+
+
+
+\clearpage
+
+\section{Results}
+
+\noindent Model parameters (intercept and shared component) can be obtained by typing:
+
+<<echo=T>>=
+getParameters(mod)
+@
+
+\noindent On the other hand, specific and shared components can be obtained by executing 
+
+<<echo=T>>=
+pdf("./figures/fig-specific.pdf")
+plot(mod)
+dev.off()
+@
+
+\noindent and
+
+<<echo=T>>=
+pdf("./figures/fig-shared.pdf")
+plot(mod, type="shared")
+dev.off()
+@
+
+
+\noindent respectively.
+
+
+
+\noindent Figure \ref{fig-specific} shows the specific components for each SNP, while Figure \ref{fig-shared} gives the shared components. 
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=10cm]{./figures/fig-specific.pdf}
+\caption{\small Specific component ...}
+\label{fig-specific}
+\end{center}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=10cm]{./figures/fig-shared.pdf}
+\caption{\small Shared component ...}
+\label{fig-shared}
+\end{center}
+\end{figure}
+
+
+
+\noindent Finnally, a hierarchical clustering can be performed by using the predicted probabilities by typing: 
+
+<<echo=T>>=
+library(RColorBrewer)
+pdf("./figures/fig-heatmap.pdf")
+makeHeatmap(mod)
+dev.off()
+@
+
+\noindent Figure \ref{fig-Heatmap} shows a Heatmap were we can observe that groups M1 and M3 are different from cases and group M1 (NOTA: podria poner lo de los genes, pero hacer esto de forma general me tomara un poco de tiempo)
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=10cm]{./figures/fig-heatmap.pdf}
+\caption{\small Heatmap ...}
+\label{fig-Heatmap}
+\end{center}
+\end{figure}
+
+\clearpage
+
+\section{Model Validation}
+
+DIC (Deviance Information Criteria) is one of the most used criteria to evaluate the goodness-of-fit for a given model. We use the function {\tt dic.samples} from {\tt rjags} package to get such information. This deviance can be computed using two types of penalization depending on the argument {\tt type}. The classic penalization proposed by \cite{SpiBesCar02} can be obtained by setting {\tt type="pD"}, while the penalization proposed by \cite{Plu08} can be obtained with {\tt type="popt"}. 
+
+\begin{verbatim}
+> dic.samples(mod$model, n.iter = 2000, type = "pD")
+loading JAGS module
+   dic
+  |**************************************************| 100%
+Mean deviance:  2083 
+pD (Markov Error): 120.1 (0.7272)
+Penalized deviance: 2203 
+\end{verbatim}
+
+\clearpage
+
+\section{Acknowledgments} 
+
+This work has been partly supported by the Spanish Ministry for Science and Innovation (MTM2008-02457) and by XXX
+
+
+\bibliographystyle{plain}
+\bibliography{bayesSNPassoc}
+
+
+\end{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

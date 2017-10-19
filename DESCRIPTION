@@ -1,0 +1,14 @@
+Package: bayesGen
+Type: Package
+Title: Bayesian model for genomic data
+Version: 0.8-5
+Date: 2012-10-18
+Depends: R (>= 2.15.0), rjags, INLA
+Suggests: SNPassoc, RColorBrewer
+Author: Juan R González, Juan J Abellán <juan.j.abellan@uv.es> and Carlos Abellán  <carlos.abellan@uv.es> 
+Maintainer: Juan R Gonzalez <jrgonzalez@creal.cat>
+Description: Bayesian shared component model to analyze SNP and CNV data in genetic studies
+License: GPL version 2 or newer
+LazyLoad: yes
+URL: http://www.r-project.org
+Encoding: latin1

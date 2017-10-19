@@ -1,0 +1,23 @@
+2011-04-11 (v0.7)
+ - added the possibility of analyzing any number of groups
+ - changed formula for new version of INLA
+
+2010-11-29 (v0.6)
+ - package includes funtions to analyze CNV data (paper submitted to Stat Med)
+
+2010-09-15 (v0.5)
+ - modified: bayesCNVassoc to allow different variances in the specific component
+
+2010-06-28 (v0.4) 
+ - modified: JAGS to quantiles (getInfoBayesCNVassoc)
+
+2010-06-28 (v0.3) 
+ - added: functions to analyze CNV data
+
+2010-03-15  (v0.1)
+ # INITIAL VERSION 
+
+
+
+
+
